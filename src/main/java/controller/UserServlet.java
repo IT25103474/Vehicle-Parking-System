@@ -16,15 +16,22 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String email = request.getParameter("email");
+
+        // Block duplicate registrations
+        if (FileHandler.isEmailRegistered(email)) {
+            response.sendRedirect("index.jsp?error=exists");
+            return;
+        }
+
         String userId = "U" + System.currentTimeMillis();
         String fullName = request.getParameter("fullName");
-        String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         RegisteredUser newUser = new RegisteredUser(userId, fullName, email, password);
         FileHandler.saveUser(newUser);
 
-        // Store user in session so we know who is adding a vehicle later
+        // Auto-login the user after registration
         request.getSession().setAttribute("currentUser", newUser);
         response.sendRedirect("dashboard.jsp");
     }
