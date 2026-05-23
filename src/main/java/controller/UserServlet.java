@@ -29,7 +29,7 @@ public class UserServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         RegisteredUser newUser = new RegisteredUser(userId, fullName, email, password);
-        FileHandler.saveUser(newUser);
+        FileHandler.saveRegisteredUser(newUser);
 
         // Auto-login the user after registration
         request.getSession().setAttribute("currentUser", newUser);
