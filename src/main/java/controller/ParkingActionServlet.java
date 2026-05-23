@@ -16,6 +16,9 @@ import java.io.IOException;
 @WebServlet("/parkingAction")
 public class ParkingActionServlet extends HttpServlet {
 
+    private String generatedId;
+    private String name;
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String actionType = request.getParameter("actionType");
@@ -55,7 +58,7 @@ public class ParkingActionServlet extends HttpServlet {
             response.sendRedirect("guest-ticket.jsp?id=" + resId);
 
             // Inside your guest processing logic:
-            UnregisteredUser guest = new UnregisteredUser(generatedId, name, phone);
+            guest = new UnregisteredUser(generatedId, name, phone);
             FileHandler.saveGuest(guest); // This persists the guest record to users.txt
         }
     }
