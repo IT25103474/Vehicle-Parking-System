@@ -53,7 +53,7 @@ public class FileHandler {
     }
 
     // =================================================================================
-    // ZONE 1: REGISTERED USER MANAGEMENT (Member: Tharunya)
+    // ZONE 1: REGISTERED USER MANAGEMENT
     // =================================================================================
 
     // CREATE
