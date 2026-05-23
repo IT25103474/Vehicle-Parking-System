@@ -50,16 +50,15 @@ public class ParkingActionServlet extends HttpServlet {
             Reservation res = new Reservation(resId, guestId, slotType);
 
             // Save all to files
-            FileHandler.saveUser(new RegisteredUser(guestId, fullName, "GUEST", phone));
+            FileHandler.saveGuest(guest);
             FileHandler.saveVehicle(vehicle);
             FileHandler.saveReservation(res.toFileString());
 
             // THE FIX: Redirect the guest directly to their live digital ticket
             response.sendRedirect("guest-ticket.jsp?id=" + resId);
 
-            // Inside your guest processing logic:
             guest = new UnregisteredUser(generatedId, name, phone);
-            FileHandler.saveGuest(guest); // This persists the guest record to users.txt
+            FileHandler.saveGuest(guest);
         }
     }
 }
