@@ -1,26 +1,29 @@
 package util;
 
-import model.RegisteredUser;
-import model.Vehicle;
-import model.Reservation;
-import model.Payment;
+import model.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SERVICE LAYER: Acts as a Data Access Object (DAO) to centralize all
+ * file I/O operations, ensuring clean separation of concerns.
+ */
 public class FileHandler {
+    // DATA PERSISTENCE: Maps system data to the local user home directory.
     private static final String DIRECTORY_PATH = System.getProperty("user.home") + "/ParkingSystemData";
     public static final String USERS_FILE = DIRECTORY_PATH + "/users.txt";
     public static final String VEHICLES_FILE = DIRECTORY_PATH + "/vehicles.txt";
     public static final String RESERVATIONS_FILE = DIRECTORY_PATH + "/reservations.txt";
     public static final String PAYMENTS_FILE = DIRECTORY_PATH + "/payments.txt";
 
+    // INITIALIZATION: Ensures the storage directory exists on system startup.
     static {
         File dir = new File(DIRECTORY_PATH);
         if (!dir.exists()) dir.mkdirs();
     }
 
-    // --- GENERIC READ/WRITE ---
+    // --- GENERIC READ/WRITE: Implements reusable logic for file streams. ---
     public static void saveToFile(String filePath, String data) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             writer.write(data);
@@ -37,13 +40,13 @@ public class FileHandler {
         return lines;
     }
 
-    // --- SPECIFIC SAVE METHODS ---
+    // --- SPECIFIC CRUD METHODS: Provides abstracted access to system entities. ---
     public static void saveUser(RegisteredUser user) { saveToFile(USERS_FILE, user.toFileString()); }
     public static void saveVehicle(Vehicle vehicle) { saveToFile(VEHICLES_FILE, vehicle.toFileString()); }
     public static void saveReservation(String resData) { saveToFile(RESERVATIONS_FILE, resData); }
     public static void savePayment(Payment payment) { saveToFile(PAYMENTS_FILE, payment.toFileString()); }
 
-    // --- SPECIFIC GET ALL METHODS ---
+    // --- GET ALL: Hydrates domain models from raw text file data. ---
     public static List<RegisteredUser> getAllUsers() {
         List<RegisteredUser> users = new ArrayList<>();
         for (String line : readFromFile(USERS_FILE)) {
@@ -69,36 +72,29 @@ public class FileHandler {
     public static List<String> getAllReservations() { return readFromFile(RESERVATIONS_FILE); }
     public static List<String> getAllPayments() { return readFromFile(PAYMENTS_FILE); }
 
-    // --- MISSING DUPLICATE CHECKS (FIXES YOUR ERROR) ---
+    // --- BUSINESS LOGIC: Validates domain constraints (e.g., uniqueness). ---
     public static boolean isVehicleRegistered(String plateNumber) {
         for (Vehicle v : getAllVehicles()) {
-            if (v.getVehicleNumber().equalsIgnoreCase(plateNumber)) {
-                return true;
-            }
+            if (v.getVehicleNumber().equalsIgnoreCase(plateNumber)) return true;
         }
         return false;
     }
 
     public static boolean isEmailRegistered(String email) {
         for (RegisteredUser u : getAllUsers()) {
-            if (u.getEmail().equalsIgnoreCase(email)) {
-                return true;
-            }
+            if (u.getEmail().equalsIgnoreCase(email)) return true;
         }
         return false;
     }
 
-    // --- LOGIN VERIFICATION ---
     public static RegisteredUser verifyLogin(String email, String password) {
         for (RegisteredUser u : getAllUsers()) {
-            if (u.getEmail().equalsIgnoreCase(email) && u.getPassword().equals(password)) {
-                return u;
-            }
+            if (u.getEmail().equalsIgnoreCase(email) && u.getPassword().equals(password)) return u;
         }
         return null;
     }
 
-    // --- DELETE OPERATIONS ---
+    // --- CRUD: DELETE & UPDATE: Provides record lifecycle management. ---
     public static void deleteRecord(String filePath, String idToMatch) {
         List<String> lines = readFromFile(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -111,7 +107,6 @@ public class FileHandler {
         } catch (IOException ignored) {}
     }
 
-    // --- UPDATE OPERATION (Checkout Reservation) ---
     public static void updateReservationToCompleted(String resId, String exitTime, double fee) {
         List<String> lines = readFromFile(RESERVATIONS_FILE);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(RESERVATIONS_FILE))) {
