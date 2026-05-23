@@ -53,6 +53,10 @@ public class ParkingActionServlet extends HttpServlet {
 
             // THE FIX: Redirect the guest directly to their live digital ticket
             response.sendRedirect("guest-ticket.jsp?id=" + resId);
+
+            // Inside your guest processing logic:
+            UnregisteredUser guest = new UnregisteredUser(generatedId, name, phone);
+            FileHandler.saveGuest(guest); // This persists the guest record to users.txt
         }
     }
 }

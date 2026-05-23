@@ -45,6 +45,10 @@ public class FileHandler {
     public static void saveVehicle(Vehicle vehicle) { saveToFile(VEHICLES_FILE, vehicle.toFileString()); }
     public static void saveReservation(String resData) { saveToFile(RESERVATIONS_FILE, resData); }
     public static void savePayment(Payment payment) { saveToFile(PAYMENTS_FILE, payment.toFileString()); }
+    // Add this to your "SPECIFIC SAVE METHODS" section
+    public static void saveGuest(UnregisteredUser guest) {
+        saveToFile(USERS_FILE, guest.toFileString());
+    }
 
     // --- GET ALL: Hydrates domain models from raw text file data. ---
     public static List<RegisteredUser> getAllUsers() {
