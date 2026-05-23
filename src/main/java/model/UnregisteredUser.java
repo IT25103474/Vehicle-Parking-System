@@ -18,7 +18,7 @@ public class UnregisteredUser extends User {
         return "One-Time Guest";
     }
 
-    // DATA PERSISTENCE: Serializes object state for file-based storage.
+    // DATA PERSISTENCE: Serializes object state for file-based storage..
     @Override
     public String toFileString() {
         return getUserId() + "," + getFullName() + ",GUEST," + phone;
