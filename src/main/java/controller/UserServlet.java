@@ -31,7 +31,7 @@ public class UserServlet extends HttpServlet {
         RegisteredUser newUser = new RegisteredUser(userId, fullName, email, password);
         FileHandler.saveRegisteredUser(newUser);
 
-        // Auto-login the user after registration
+        // Auto-login the user after registration.
         request.getSession().setAttribute("currentUser", newUser);
         response.sendRedirect("dashboard.jsp");
     }

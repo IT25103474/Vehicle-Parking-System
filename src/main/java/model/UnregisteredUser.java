@@ -12,7 +12,7 @@ public class UnregisteredUser extends User {
         this.phone = phone;
     }
 
-    // POLYMORPHISM: Overrides base method to define guest-specific UI behavior.
+    // POLYMORPHISM: Overrides base method to define guest-specific UI behavior
     @Override
     public String displayRole() {
         return "One-Time Guest";

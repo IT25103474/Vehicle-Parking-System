@@ -17,7 +17,7 @@ public class VehicleServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // 1. Get the data from your JSP form
+        // 1. Get the data from your JSP form.
         String vehicleNumber = request.getParameter("vehicleNumber");
         String type = request.getParameter("type"); // Captures the dropdown value
 
